@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Crée le fichier /var/run/myscript.pid contenant son PID
+echo $$ > /var/run/myscript.pid
+
+
+handle_signals() {
+    case $1 in
+        SIGINT)
+            echo "Y U no love me?!"
+            ;;
+        SIGTERM)
+            echo "I hate the kill command"
+            ;;
+        SIGQUIT)
+            rm -f /var/run/myscript.pid
+            exit 0
+            ;;
+    esac
+}
+
+trap 'handle_signals SIGINT' SIGINT
+trap 'handle_signals SIGTERM' SIGTERM
+trap 'handle_signals SIGQUIT' SIGQUIT
+
+
+while true; do
+    echo "To infinity and beyond"
+    sleep 1
+done
